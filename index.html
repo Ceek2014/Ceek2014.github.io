@@ -300,11 +300,11 @@
   <div class="panel">
     <!-- 题型 -->
     <div class="section">
-      <div class="section-title">题型 <span class="tip">（诗歌阅读、诗歌诵读、文言文阅读、小作文写作、应用文写作均已就绪）</span></div>
+      <div class="section-title">题型 <span class="tip">（诗歌阅读、诗歌诵读、文言文阅读、作文写作、应用文写作均已就绪）</span></div>
       <div class="type-tabs" id="typeTabs"></div>
     </div>
 
-    <!-- v14 修改：背诵内容区加 id，便于小作文写作模块隐藏 -->
+    <!-- v14 修改：背诵内容区加 id，便于作文写作模块隐藏 -->
     <div class="section" id="poemSection">
       <div class="section-title" id="poemSectionTitle">背诵内容 <span class="tip" id="poemTip">（可多选，不选则默认全部篇目）</span></div>
       <div class="toolbar-row">
@@ -314,7 +314,7 @@
       <div class="poem-grid" id="poemGrid"></div>
     </div>
 
-    <!-- v7 新增 / v14 修改：题目形式区；文言文显示形式，小作文写作时标题改为"背诵内容"并仅保留三类 -->
+    <!-- v7 新增 / v14 修改：题目形式区；文言文显示形式，作文写作时标题改为"背诵内容"并仅保留三类 -->
     <div class="section" id="formSection" style="display:none;">
       <div class="section-title"><span id="formSectionTitle">题目形式</span> <span class="tip" id="formTip">（根据全部篇目生成，可多选）</span></div>
       <div class="toolbar-row">
@@ -1049,8 +1049,8 @@ const BANK = {
       { q: `《六国论》的中心论点是什么？提出方式有何特点？文章从哪些方面论证？`, a: `中心论点：六国破灭，弊在赂秦。先提出论点，然后以论据论证论点，好处是开门见山，简洁明快。两个分论点："赂秦而力亏，破灭之道也""不赂者以赂者丧"。` }
     ]
   },
-  /* v9 新增 / v11 扩充一元材料 / v12 扩充二元材料 / v13 改造材料题（题干=材料全文，答案=关键词）：小作文写作 8 类题目形式，共 73 条（53 条模板 + 10 则一元作文材料 + 10 则二元作文材料）；每条直接标注 form */
-  "小作文写作": {
+  /* v9 新增 / v11 扩充一元材料 / v12 扩充二元材料 / v13 改造材料题（题干=材料全文，答案=关键词）：作文写作 8 类题目形式，共 73 条（53 条模板 + 10 则一元作文材料 + 10 则二元作文材料）；每条直接标注 form */
+  "作文写作": {
     "写作模板": [
       /* 一元作文标题模板 9 条 */
       { form: "一元作文标题模板", q: `一元作文标题模板：以"舟"为意象拟题`, a: `以（关键词）为舟，扬起成功/理想/青春/成长/时代/人生的风帆` },
@@ -1226,8 +1226,8 @@ const TYPES = [
   { name: "诗歌诵读", ready: true },
   /* v6 新增题库：文言文阅读 7 篇，题型覆盖通假字、特殊句式、词类活用、古今异义、实词、翻译、问答与文学常识 */
   { name: "文言文阅读", ready: true },
-  /* v9 新增 / v11 扩充 / v12 扩充：小作文写作 73 条（含一元、二元作文材料各 10 则） */
-  { name: "小作文写作", ready: true },
+  /* v9 新增 / v11 扩充 / v12 扩充：作文写作 73 条（含一元、二元作文材料各 10 则） */
+  { name: "作文写作", ready: true },
   /* v15 新增题库：应用文写作 6 种文种各 10 题，共 60 题（依据 2027 考纲：格式规范+职场情境） */
   { name: "应用文写作", ready: true }
 ];
@@ -1235,10 +1235,10 @@ const TYPES = [
 /* ========================= v7 新增：题目形式分类 ========================= */
 /* 依据题干固定前缀自动归类，题库原始 q / a 一字不改 */
 const FORM_ORDER = ["通假字", "特殊句式", "词类活用", "古今异义", "实词解释", "句子翻译", "问答题与文学常识"];
-/* v9 新增 / v14 修改：小作文写作的"背诵内容"仅保留三类，原 8 类题目形式不再作为筛选项 */
+/* v9 新增 / v14 修改：作文写作的"背诵内容"仅保留三类，原 8 类题目形式不再作为筛选项 */
 const WRITING_FORMS = ["万能素材句模板", "一元作文材料", "二元作文材料"];
 function getFormOrder() {
-  return currentType === "小作文写作" ? WRITING_FORMS : FORM_ORDER;
+  return currentType === "作文写作" ? WRITING_FORMS : FORM_ORDER;
 }
 function classifyForm(q) {
   if (/通哪个字|同哪个字/.test(q)) return "通假字";
@@ -1276,7 +1276,7 @@ function getPoems() {
 /* v14 改造：抽题池生成。文言文按各形式数量分别取题；小作文按"背诵内容"三类筛选；其余沿用篇目+形式筛选 */
 function getAllQuestions(selectedOnly) {
   const isClassical = currentType === "文言文阅读";
-  const isWriting = currentType === "小作文写作";
+  const isWriting = currentType === "作文写作";
   /* 文言文/小作文忽略篇目勾选（文言文仍按篇目过滤，小作文篇目区已隐藏） */
   const poems = getPoems().filter(p => (isWriting || !selectedOnly) || selectedPoems.has(p));
   const list = [];
@@ -1329,9 +1329,9 @@ function renderTypes() {
   });
 }
 
-/* v14 新增：按题型控制区块显示。小作文写作删除"背诵内容"篇目区（其内容已并入题目形式区并改名"背诵内容"） */
+/* v14 新增：按题型控制区块显示。作文写作删除"背诵内容"篇目区（其内容已并入题目形式区并改名"背诵内容"） */
 function updateSectionVisibility() {
-  const isWriting = currentType === "小作文写作";
+  const isWriting = currentType === "作文写作";
   $("poemSection").style.display = isWriting ? "none" : "";
   $("countSectionTitle").textContent = "题目数量";
 }
@@ -1362,18 +1362,18 @@ function renderPoems() {
 
 /* v7 新增 / v8 修改 / v9 扩展 / v14 大改：题目形式（文言文）/ 背诵内容（小作文）界面
    - 文言文阅读：每个题目形式旁增加数量输入，按各形式分别抽题
-   - 小作文写作：删除篇目区，本区标题改为"背诵内容"，仅显示三类
+   - 作文写作：删除篇目区，本区标题改为"背诵内容"，仅显示三类
    列表与题数随已选篇目动态生成 */
 function renderForms() {
   const section = $("formSection");
-  const isWriting = currentType === "小作文写作";
+  const isWriting = currentType === "作文写作";
   const isClassical = currentType === "文言文阅读";
   if (!isClassical && !isWriting) {
     section.style.display = "none";
     return;
   }
   section.style.display = "";
-  /* v14 新增：小作文写作把本区标题改为"背诵内容"，文言文保持"题目形式" */
+  /* v14 新增：作文写作把本区标题改为"背诵内容"，文言文保持"题目形式" */
   $("formSectionTitle").textContent = isWriting ? "背诵内容" : "题目形式";
   /* v14 新增：按已选篇目统计（未选篇目则按全部篇目）。小作文忽略篇目选择（篇目区已隐藏） */
   const hasSelection = isClassical && selectedPoems.size > 0;
@@ -1585,7 +1585,7 @@ function draw() {
   /* v7 新增 / v14 修改：结果摘要。文言文显示各形式数量明细，小作文显示背诵内容 */
   const formDesc = isClassical
     ? ` · 形式：${FORM_ORDER.filter(f => (formQty[f] || 0) > 0).map(f => `${f}×${formQty[f]}`).join("、")}`
-    : (currentType === "小作文写作" && selectedForms.size)
+    : (currentType === "作文写作" && selectedForms.size)
       ? ` · 背诵内容：${WRITING_FORMS.filter(f => selectedForms.has(f)).join("、")}` : "";
   $("resultSub").textContent = `共 ${n} 张背诵卡 · 来源：${hasSelection ? [...selectedPoems].join("、") : "全部篇目"}${formDesc}`; /* v10 修改 */
 
